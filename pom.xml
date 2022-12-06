@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.rhul.cs.dice</groupId>
     <artifactId>jstarworldsturbo</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <properties>
         <maven.compiler.source>1.19</maven.compiler.source>
         <maven.compiler.target>1.19</maven.compiler.target>

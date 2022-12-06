@@ -1,5 +1,7 @@
 package uk.ac.rhul.cs.dice.jstarworldsturbo.common;
 
+import org.json.JSONObject;
+
 public interface Coord {
     public abstract long getX();
 
@@ -26,4 +28,13 @@ public interface Coord {
     }
 
     public abstract Coord deepCopy();
+
+    public default JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put("x", getX());
+        json.put("y", getY());
+
+        return json;
+    }
 }
