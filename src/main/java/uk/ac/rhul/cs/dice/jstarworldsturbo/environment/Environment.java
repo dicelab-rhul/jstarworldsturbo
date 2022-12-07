@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import uk.ac.rhul.cs.dice.jstarworldsturbo.common.Action;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.common.BccMessage;
+import uk.ac.rhul.cs.dice.jstarworldsturbo.common.Coord;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.common.Perception;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.common.exceptions.CommunicationException;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.common.exceptions.EnvironmentException;
@@ -18,44 +19,46 @@ import uk.ac.rhul.cs.dice.jstarworldsturbo.elements.Actor;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.elements.Body;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.environment.physics.ActionExecutor;
 
-public interface Environment {
-    public abstract Ambient getAmbient();
+public interface Environment<M extends Ambient, A extends Actor, B extends Body> {
+    public abstract M getAmbient();
 
     public abstract long getCycleNumber();
 
     public abstract void incrementCycleNumber();
 
-    public Map<String, Actor> getActors();
+    public Map<String, A> getActors();
 
-    public abstract List<Actor> getActorsList();
+    public abstract List<A> getActorsList();
 
     public abstract List<String> getActorsIDs();
 
     public abstract List<String> getActorsProgressiveIDs();
 
-    public abstract Optional<Actor> getActorByID(String id);
+    public abstract Optional<A> getActorByID(String id);
 
     public default void removeActorByID(String id) {
         this.getActors().remove(id);
         this.getAmbient().removeActorByID(id);
     }
 
-    public abstract void addActor(Actor actor);
+    public abstract void addActor(A actor, Coord coordinates);
 
-    public Map<String, Body> getPassiveBodies();
+    public Map<String, B> getPassiveBodies();
 
-    public abstract List<Body> getPassiveBodiesList();
+    public abstract List<B> getPassiveBodiesList();
 
     public abstract List<String> getPassiveBodiesIDs();
 
     public abstract List<String> getPassiveBodiesProgressiveIDs();
 
-    public abstract Optional<Body> getPassiveBodyByID(String id);
+    public abstract Optional<B> getPassiveBodyByID(String id);
 
     public default void removePassiveBodyByID(String id) {
         this.getPassiveBodies().remove(id);
         this.getAmbient().removePassiveBodyByID(id);
     }
+
+    public abstract void addPassiveBody(B body, Coord coordinates);
 
     public default void evolve() {
         this.executeCycleActions();
@@ -102,7 +105,7 @@ public interface Environment {
     }
 
     public default void executeCycleActions() {
-        for (Actor actor: this.getActorsList()) {
+        for (A actor: this.getActorsList()) {
             actor.cycle();
 
             Iterable<Action> actions = actor.getPendingActions();

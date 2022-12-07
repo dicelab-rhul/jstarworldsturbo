@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.elements.Actor;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.elements.Body;
 
-public abstract class AbstractEnvironment implements Environment {
-    private Ambient ambient;
-    private Map<String, Actor> actors;
-    private Map<String, Body> passiveBodies;
+public abstract class AbstractEnvironment<M extends Ambient, A extends Actor, B extends Body> implements Environment<M, A, B> {
+    private M ambient;
+    private Map<String, A> actors;
+    private Map<String, B> passiveBodies;
     private long cycleNumber;
     
-    protected AbstractEnvironment(Ambient ambient, Map<String, Actor> actors, Map<String, Body> passiveBodies) {
+    protected AbstractEnvironment(M ambient, Map<String, A> actors, Map<String, B> passiveBodies) {
         assert ambient != null;
 
         this.ambient = ambient;
@@ -25,7 +25,7 @@ public abstract class AbstractEnvironment implements Environment {
     }
 
     @Override
-    public Ambient getAmbient() {
+    public M getAmbient() {
         return this.ambient;
     }
 
@@ -40,7 +40,7 @@ public abstract class AbstractEnvironment implements Environment {
     }
 
     @Override
-    public List<Actor> getActorsList() {
+    public List<A> getActorsList() {
         return this.actors.values().stream().collect(Collectors.toList());
     }
 
@@ -55,7 +55,7 @@ public abstract class AbstractEnvironment implements Environment {
     }
 
     @Override
-    public Optional<Actor> getActorByID(String id) {
+    public Optional<A> getActorByID(String id) {
         return Optional.ofNullable(this.actors.get(id));
     }
 
@@ -65,7 +65,7 @@ public abstract class AbstractEnvironment implements Environment {
     }
 
     @Override
-    public List<Body> getPassiveBodiesList() {
+    public List<B> getPassiveBodiesList() {
         return this.passiveBodies.values().stream().collect(Collectors.toList());
     }
 
@@ -80,7 +80,7 @@ public abstract class AbstractEnvironment implements Environment {
     }
 
     @Override
-    public Optional<Body> getPassiveBodyByID(String id) {
+    public Optional<B> getPassiveBodyByID(String id) {
         return Optional.ofNullable(this.passiveBodies.get(id));
     }
 
