@@ -6,9 +6,12 @@ import java.nio.file.Path;
 
 import org.json.JSONObject;
 
+import uk.ac.rhul.cs.dice.jstarworldsturbo.elements.Actor;
+import uk.ac.rhul.cs.dice.jstarworldsturbo.elements.Body;
+import uk.ac.rhul.cs.dice.jstarworldsturbo.environment.Ambient;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.environment.Environment;
 
-public abstract class SaveStateManager {
+public abstract class SaveStateManager<M extends Ambient, A extends Actor, B extends Body> {
     private String savedStatesParentDirStringPath;
     private Path savedStatesParentDirPath;
 
@@ -39,7 +42,7 @@ public abstract class SaveStateManager {
 
     public abstract void saveState(JSONObject state);
 
-    public abstract Environment loadState(String filename);
+    public abstract Environment<M, A, B> loadState(String filename);
 
     public boolean exists(String filename) {
         return Files.exists(Path.of(this.savedStatesParentDirStringPath, filename));

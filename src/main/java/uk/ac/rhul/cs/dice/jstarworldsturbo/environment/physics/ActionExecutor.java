@@ -5,10 +5,13 @@ import java.util.List;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.common.Action;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.common.result.ActionOutcome;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.common.result.ActionResult;
+import uk.ac.rhul.cs.dice.jstarworldsturbo.elements.Actor;
+import uk.ac.rhul.cs.dice.jstarworldsturbo.elements.Body;
+import uk.ac.rhul.cs.dice.jstarworldsturbo.environment.Ambient;
 import uk.ac.rhul.cs.dice.jstarworldsturbo.environment.Environment;
 
-public interface ActionExecutor {
-    public default ActionResult execute(Action action, Environment environment) {
+public interface ActionExecutor<M extends Ambient, A extends Actor, B extends Body> {
+    public default ActionResult execute(Action action, Environment<M, A, B> environment) {
         if (!this.isPossible(action, environment)) {
             return this.createImpossibleResult(action, environment);
         }
@@ -25,15 +28,15 @@ public interface ActionExecutor {
         }
     }
 
-    public abstract boolean isPossible(Action action, Environment environment);
+    public abstract boolean isPossible(Action action, Environment<M, A, B> environment);
 
-    public abstract ActionResult attempt(Action action, Environment environment);
+    public abstract ActionResult attempt(Action action, Environment<M, A, B> environment);
 
-    public boolean succeeded(Action action, Environment environment);
+    public boolean succeeded(Action action, Environment<M, A, B> environment);
 
-    public ActionResult createImpossibleResult(Action action, Environment environment);
+    public ActionResult createImpossibleResult(Action action, Environment<M, A, B> environment);
 
-    public ActionResult createSucceededResult(Action action, Environment environment);
+    public ActionResult createSucceededResult(Action action, Environment<M, A, B> environment);
 
-    public ActionResult createFailedResult(Action action, Environment environment);
+    public ActionResult createFailedResult(Action action, Environment<M, A, B> environment);
 }

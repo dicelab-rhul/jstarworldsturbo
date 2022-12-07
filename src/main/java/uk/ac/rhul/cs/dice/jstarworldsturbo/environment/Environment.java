@@ -37,7 +37,6 @@ public interface Environment<M extends Ambient, A extends Actor, B extends Body>
     public abstract Optional<A> getActorByID(String id);
 
     public default void removeActorByID(String id) {
-        this.getActors().remove(id);
         this.getAmbient().removeActorByID(id);
     }
 
@@ -54,7 +53,6 @@ public interface Environment<M extends Ambient, A extends Actor, B extends Body>
     public abstract Optional<B> getPassiveBodyByID(String id);
 
     public default void removePassiveBodyByID(String id) {
-        this.getPassiveBodies().remove(id);
         this.getAmbient().removePassiveBodyByID(id);
     }
 
@@ -119,7 +117,7 @@ public interface Environment<M extends Ambient, A extends Actor, B extends Body>
     public abstract void validateActorActionsForThisCycle(Iterable<Action> actions);
 
     public default void executeAction(Action action) {
-        Optional<ActionExecutor> executor = this.getExecutorFor(action);
+        Optional<ActionExecutor<M, A, B>> executor = this.getExecutorFor(action);
     
         if (!executor.isPresent()) {
             throw new EnvironmentException("No executor found for action " + action + ".");
@@ -132,7 +130,7 @@ public interface Environment<M extends Ambient, A extends Actor, B extends Body>
         }
     }
 
-    public abstract Optional<ActionExecutor> getExecutorFor(Action action);
+    public abstract Optional<ActionExecutor<M, A, B>> getExecutorFor(Action action);
 
     public default JSONObject toJSON() {
         return this.getAmbient().toJSON();
