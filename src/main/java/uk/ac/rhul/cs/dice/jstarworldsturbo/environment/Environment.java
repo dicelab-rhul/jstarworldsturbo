@@ -117,20 +117,20 @@ public interface Environment<M extends Ambient, A extends Actor, B extends Body>
     public abstract void validateActorActionsForThisCycle(Iterable<Action> actions);
 
     public default void executeAction(Action action) {
-        Optional<ActionExecutor<M, A, B>> executor = this.getExecutorFor(action);
+        Optional<ActionExecutor> executor = this.getExecutorFor(action);
     
         if (!executor.isPresent()) {
             throw new EnvironmentException("No executor found for action " + action + ".");
         }
         else {
-            ActionResult result = executor.get().execute(action, this);
+            ActionResult result = executor.get().execute();
             Perception perception = this.generatePerceptionForActor(action.getActorID(), action.getClass(), result);
 
             this.sendPerceptionToActor(action.getActorID(), perception);
         }
     }
 
-    public abstract Optional<ActionExecutor<M, A, B>> getExecutorFor(Action action);
+    public abstract Optional<ActionExecutor> getExecutorFor(Action action);
 
     public default JSONObject toJSON() {
         return this.getAmbient().toJSON();
