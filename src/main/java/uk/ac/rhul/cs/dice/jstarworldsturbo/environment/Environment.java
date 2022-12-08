@@ -63,7 +63,7 @@ public interface Environment<M extends Ambient, A extends Actor, B extends Body>
         this.incrementCycleNumber();
     }
 
-    public abstract Perception generatePerceptionForActor(String actorID, Class<? extends Action> actionClass, ActionResult result);
+    public abstract Perception generatePerceptionForActor(String actorID, ActionResult result);
 
     public default void sendMessageToRecipients(String senderID, Serializable content, List<String> recipientsIDs, boolean checkSenderId) {
         // The validation (among other things) removes the sender and the unknown recipients from the recipients list.
@@ -124,7 +124,7 @@ public interface Environment<M extends Ambient, A extends Actor, B extends Body>
         }
         else {
             ActionResult result = executor.get().execute();
-            Perception perception = this.generatePerceptionForActor(action.getActorID(), action.getClass(), result);
+            Perception perception = this.generatePerceptionForActor(action.getActorID(), result);
 
             this.sendPerceptionToActor(action.getActorID(), perception);
         }

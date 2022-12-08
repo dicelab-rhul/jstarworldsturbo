@@ -217,7 +217,7 @@ public interface Coord {
     public default Coord sub(long delta) {
         return sub(delta, delta);
     }
- 
+
     /**
      * Returns whether or not this object's x and y values are both non-negative (i.e., >= 0).
      * 
