@@ -25,6 +25,11 @@ public abstract class AbstractEnvironment<M extends Ambient, A extends Actor, B 
     }
 
     @Override
+    public void resetCycleNumber() {
+        this.cycleNumber = 0;
+    }
+
+    @Override
     public void incrementCycleNumber() {
         this.cycleNumber++;
     }

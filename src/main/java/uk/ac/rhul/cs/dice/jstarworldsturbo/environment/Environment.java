@@ -24,6 +24,8 @@ public interface Environment<M extends Ambient, A extends Actor, B extends Body>
 
     public abstract long getCycleNumber();
 
+    public abstract void resetCycleNumber();
+
     public abstract void incrementCycleNumber();
 
     public Map<String, A> getActors();
@@ -59,9 +61,15 @@ public interface Environment<M extends Ambient, A extends Actor, B extends Body>
     public abstract void addPassiveBody(B body, Coord coordinates);
 
     public default void evolve() {
+        if (this.getCycleNumber() == 0) {
+            this.forceInitialPerceptionToActors();
+        }
+
         this.executeCycleActions();
         this.incrementCycleNumber();
     }
+
+    public abstract void forceInitialPerceptionToActors();
 
     public abstract Perception generatePerceptionForActor(String actorID, ActionResult result);
 
